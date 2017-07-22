@@ -1,4 +1,5 @@
 var pgModel = require('../bluebird-sample/pgModel');
+var pgConnection = require('../bluebird-sample/pgConnection');
 var promise = require('bluebird');
 
 
@@ -17,6 +18,24 @@ module.exports = {
                 });
             });
         } catch (exp) {
+            throw exp;
+        }
+    },
+
+    CourseMaterial: function(courseId, callback) {
+        var query = " select * from fn_course_material('" + courseId + "')";
+        console.log('Query ||' + query);
+        try {
+            pgConnection.ExecuteQuery(query, function(err, result) {
+                if (err) {
+                    callback(err, null);
+                } else {
+                    callback(null, result);
+                }
+            });
+        } catch (exp) {
+            console.log('Exception');
+            console.log(JSON.stringify(exp));
             throw exp;
         }
     }
